@@ -20,7 +20,7 @@
 		},
 		"kubernetesVersion": {
 			"type": "string",
-			"defaultValue": "1.18.14"
+			"defaultValue": "1.21.7"
 		}
 	},
 	"variables": {
@@ -30,7 +30,7 @@
 		{
 			"type": "Microsoft.EventHub/namespaces",
 			"apiVersion": "2018-01-01-preview",
-			"name": "[replace(variables('NewRGName'),'Tel', concat('Tel-EvtHub-', copyIndex(1)))]",
+			"name": "[concat(variables('NewRGName'),'-EvtHub-',copyIndex(1))]",
 			"location": "[resourceGroup().location]",
 			"sku": {
 				"name": "Standard",
@@ -91,10 +91,10 @@
 		{
 			"type": "Microsoft.EventHub/namespaces/AuthorizationRules",
 			"apiVersion": "2017-04-01",
-			"name": "[concat(replace(variables('NewRGName'),'Tel', concat('Tel-EvtHub-', copyIndex(1))), '/RootManageSharedAccessKey')]",
+			"name": "[concat(variables('NewRGName'),'-EvtHub-', copyIndex(1), '/RootManageSharedAccessKey')]",
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
-				"[resourceId('Microsoft.EventHub/namespaces', concat(replace(variables('NewRGName'),'Tel', concat('Tel-EvtHub-', copyIndex(1)))))]"
+				"[resourceId('Microsoft.EventHub/namespaces', concat(variables('NewRGName'),'-EvtHub-', copyIndex(1)))]"
 			],
 			"properties": {
 				"rights": [
@@ -113,10 +113,10 @@
 		{
 			"type": "Microsoft.EventHub/namespaces/eventhubs",
 			"apiVersion": "2017-04-01",
-			"name": "[concat(replace(variables('NewRGName'),'Tel', concat('Tel-EvtHub-', copyIndex(1))), '/aggregator-1')]",
+			"name": "[concat(variables('NewRGName'),'-EvtHub-', copyIndex(1), '/aggregator-1')]",
 			"location": "Central India",
 			"dependsOn": [
-				"[resourceId('Microsoft.EventHub/namespaces', concat(replace(variables('NewRGName'),'Tel', concat('Tel-EvtHub-', copyIndex(1)))))]"
+				"[resourceId('Microsoft.EventHub/namespaces', concat(variables('NewRGName'),'-EvtHub-', copyIndex(1)))]"
 			],
 			"properties": {
 				"messageRetentionInDays": 3,
@@ -133,10 +133,10 @@
 		{
 			"type": "Microsoft.EventHub/namespaces/networkRuleSets",
 			"apiVersion": "2018-01-01-preview",
-			"name": "[concat(replace(variables('NewRGName'),'Tel', concat('Tel-EvtHub-', copyIndex(1))), '/default')]",
+			"name": "[concat(variables('NewRGName'),'-EvtHub-', copyIndex(1), '/default')]",
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
-				"[resourceId('Microsoft.EventHub/namespaces', concat(replace(variables('NewRGName'),'Tel', concat('Tel-EvtHub-', copyIndex(1)))))]"
+				"[resourceId('Microsoft.EventHub/namespaces', concat(variables('NewRGName'),'-EvtHub-', copyIndex(1)))]"
 			],
 			"properties": {
 				"defaultAction": "Deny",
@@ -189,7 +189,7 @@
 		},
 		{
 			"type": "Microsoft.OperationalInsights/workspaces",
-			"name": "[replace(variables('NewRGName'),'Tel', 'Tel-LAWKS')]",
+			"name": "[concat(variables('NewRGName'),'-LAWKS')]",
 			"apiVersion": "2020-08-01",
 			"location": "centralindia",
 			"properties": {
@@ -207,10 +207,10 @@
 		{
 			"type": "Microsoft.ContainerService/managedClusters",
 			"apiVersion": "2020-02-01",
-			"name": "[replace(variables('NewRGName'),'Tel', 'Tel-AKS')]",
+			"name": "[concat(variables('NewRGName'),'-AKS')]",
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
-				"[resourceId('Microsoft.OperationalInsights/workspaces', replace(variables('NewRGName'),'Tel', 'Tel-LAWKS'))]",
+				"[resourceId('Microsoft.OperationalInsights/workspaces', concat(variables('NewRGName'),'-LAWKS'))]",
 				"[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(variables('NewRGName'), '-Vnet'), 'subnet1')]"
 			],
 			"properties": {
@@ -243,7 +243,7 @@
 					"omsagent": {
 						"enabled": true,
 						"config": {
-							"logAnalyticsWorkspaceResourceID": "[resourceId('Microsoft.OperationalInsights/workspaces', replace(variables('NewRGName'),'Tel', 'Tel-LAWKS'))]"
+							"logAnalyticsWorkspaceResourceID": "[resourceId('Microsoft.OperationalInsights/workspaces', concat(variables('NewRGName'),'-LAWKS'))]"
 						}
 					}
 				},
@@ -277,9 +277,9 @@
 		{
 			"type": "Microsoft.ContainerService/managedClusters/agentPools",
 			"apiVersion": "2020-02-01",
-			"name": "[concat(replace(variables('NewRGName'),'Tel', 'Tel-AKS'), '/node1')]",
+			"name": "[concat(variables('NewRGName'),'-AKS','/node1')]",
 			"dependsOn": [
-				"[resourceId('Microsoft.ContainerService/managedClusters', replace(variables('NewRGName'),'Tel', 'Tel-AKS'))]",
+				"[resourceId('Microsoft.ContainerService/managedClusters', concat(variables('NewRGName'),'-AKS'))]",
 				"[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(variables('NewRGName'), '-Vnet'), 'subnet1')]"
 			],
 			"properties": {
@@ -299,7 +299,7 @@
 		{
 			"type": "Microsoft.Cache/Redis",
 			"apiVersion": "2019-07-01",
-			"name": "[replace(variables('NewRGName'),'Tel', 'Tel-RedisCache')]",
+			"name": "[concat(variables('NewRGName'),'-RedisCache')]",
 			"location": "[resourceGroup().location]",
 			"properties": {
 				"sku": {
