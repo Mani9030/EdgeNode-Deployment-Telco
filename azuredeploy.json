@@ -219,7 +219,7 @@
 				"agentPoolProfiles": [
 					{
 						"name": "node1",
-						"count": 3,
+						"count": 1,
 						"vmSize": "Standard_D8as_v4",
 						"osDiskSizeGB": 120,
 						"vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(variables('NewRGName'), '-Vnet'), 'subnet1')]",
@@ -229,7 +229,15 @@
 						"maxCount": 20,
 						"type": "VirtualMachineScaleSets",
 						"orchestratorVersion": "[parameters('kubernetesVersion')]",
-						"osType": "Linux"
+						"osType": "Linux",
+						"mode": "System",
+						"linuxOSConfig": {
+                            "sysctls": {
+                                "netCoreRmemMax": 134217728,
+                                "netCoreWmemMax": 134217728,
+                                "netIpv4TcpTwReuse": true
+                            }
+                        }
 					}
 				],
 				"servicePrincipalProfile": {
@@ -284,16 +292,24 @@
 			],
 			"properties": {
 				"count": 3,
-				"vmSize": "Standard_F16s",
-				"osDiskSizeGB": 100,
+				"vmSize": "Standard_D8as_v4",
+				"osDiskSizeGB": 120,
 				"vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(variables('NewRGName'), '-Vnet'), 'subnet1')]",
 				"maxPods": 30,
 				"type": "VirtualMachineScaleSets",
 				"orchestratorVersion": "[parameters('kubernetesVersion')]",
 				"osType": "Linux",
 				"enableAutoScaling": true,
-				"minCount": 3,
-				"maxCount": 20
+				"minCount": 1,
+				"maxCount": 20,
+				"mode": "System",
+				"linuxOSConfig": {
+                    "sysctls": {
+                        "netCoreRmemMax": 134217728,
+                        "netCoreWmemMax": 134217728,
+                        "netIpv4TcpTwReuse": true
+                    }
+                }
 			}
 		},
 		{
