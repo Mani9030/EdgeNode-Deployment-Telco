@@ -125,7 +125,7 @@
 			},
 			"copy": {
 				"name": "eventhubs",
-				"count": 2,
+				"count": 1,
 				"mode": "serial",
 				"batchSize": 1
 			}
@@ -220,12 +220,12 @@
 					{
 						"name": "node1",
 						"count": 3,
-						"vmSize": "Standard_F16s",
-						"osDiskSizeGB": 100,
+						"vmSize": "Standard_D8as_v4",
+						"osDiskSizeGB": 120,
 						"vnetSubnetID": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(variables('NewRGName'), '-Vnet'), 'subnet1')]",
 						"maxPods": 30,
 						"enableAutoScaling": true,
-						"minCount": 3,
+						"minCount": 1,
 						"maxCount": 20,
 						"type": "VirtualMachineScaleSets",
 						"orchestratorVersion": "[parameters('kubernetesVersion')]",
@@ -303,8 +303,8 @@
 			"location": "[resourceGroup().location]",
 			"properties": {
 				"sku": {
-					"name": "Premium",
-					"family": "P",
+					"name": "Standard",
+					"family": "C",
 					"capacity": 1
 				},
 				"enableNonSslPort": false,
